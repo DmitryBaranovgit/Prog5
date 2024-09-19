@@ -79,3 +79,5 @@ if __name__ == '__main__':
     else:
         print('Failed to get weather data')
 ```
+Результат:
+![Результат:](/Lr2/Lr2.png "Результат")

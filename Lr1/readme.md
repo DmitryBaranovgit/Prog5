@@ -19,3 +19,5 @@ import myremotemodule
 myremotenodule.myfoo()
 ```
 Результат:
+
+Дополнительное задание:

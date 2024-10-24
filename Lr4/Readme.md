@@ -41,6 +41,9 @@ for num in fib_iterator:
 
 # Результат:
 [Код: gen_fib.py](/Lr4/gen_fib.py)
+
 [Код: test_fib.py](/Lr4/test_fib.py)
+
 ![Задание 1](/Lr4/Lr4p1.png)
+
 ![Задание 2](/Lr4/Lr4p2.png)

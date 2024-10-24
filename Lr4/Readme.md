@@ -40,7 +40,7 @@ for num in fib_iterator:
 - **`__next__()`** - итерируется по списку и возращает только те числа, которые содержатся в ряду Фибоначчи.
 
 # Результат:
-![Код: gen_fib.py](/Lr4/gen_fib.py)
-![Код: test_fib.py](/Lr4/test_fib.py)
+[Код: gen_fib.py](/Lr4/gen_fib.py)
+[Код: test_fib.py](/Lr4/test_fib.py)
 ![Задание 1](/Lr4/Lr4p1.png)
 ![Задание 2](/Lr4/Lr4p2.png)

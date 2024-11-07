@@ -20,7 +20,16 @@ class CurrencyManager(metaclass = SingletonMeta):
     def __init__(self):
         self._last_request_time = 0
         self._cache = {}
+        self._currencies_data = None
     
+    @property
+    def currencies_data(self):
+        return self._currencies_data
+
+    def clear_cache(self):
+        self._cache = {}
+        self._last_request_time = 0
+
     def get_currencies(self, currencies_ids_lst: list, refresh_interval: int = 1) -> list:
         current_time = time.time()
         if current_time - self._last_request_time < refresh_interval:
@@ -31,6 +40,8 @@ class CurrencyManager(metaclass = SingletonMeta):
         root = ET.fromstring(response.content)
 
         result = []
+        found_ids = set()
+
         for valute in root.findall("Valute"):
             valute_id = valute.get("ID")
 
@@ -44,10 +55,39 @@ class CurrencyManager(metaclass = SingletonMeta):
                 int_part, frac_part = str(decimal_value).split(".")
 
                 result.append({char_code: (name, (int_part, frac_part), nominal)})
+                found_ids.add(valute_id)
+        
+        for currency_id in currencies_ids_lst:
+            if currency_id not in found_ids:
+                result.append({currency_id:None})
+
         self._cache = result
+        self._currencies_data = result
         self._last_request_time = current_time
         return result
     
+    def visualize_currencies(self):
+        if not self._currencies_data:
+            print("Данные для визуализации отсутствуют.")
+            return
+        
+        fig, ax = plt.subplots()
+        labels = [list(currency.keys())[0] for currency in self._currencies_data]
+        values = [
+            float(".".join(currency[list(currency.keys())[0]][1]))
+            for currency in self._currencies_data if currency[list(currency.keys())[0]] is not None
+        ]
+
+        ax.bar(labels, values, color = 'skyblue')
+        ax.set_ylabel('Курсы к рублю')
+        ax.set_title('Курсы валют на текущую дату')
+
+        plt.savefig('currencies.jpg')
+        plt.show()
+
+    def __del__(self):
+        print("Удаление объекта CurrencyManager")
+
 # valutes = root.findall(
 #     "Valute"
 # )  # исследовать, есть ли отдельный метод получения валют с опреденным id
@@ -63,10 +103,10 @@ class CurrencyManager(metaclass = SingletonMeta):
 #         result.append(valute)
 # return result
 
-class CurrenciesLst():
+# class CurrenciesLst():
 
-    def __init__(self, currencies_data):
-        self.__cur_lst = currencies_data
+#     def __init__(self, currencies_data):
+#         self.__cur_lst = currencies_data
         # self.__cur_lst = [{
         #     'GBP': ('Фунт стерлингов Соединенного королевства', '113,2069')
         # }, {
@@ -75,26 +115,26 @@ class CurrenciesLst():
         #     'TRY': ('Турецких лир', '33,1224')
         # }]
 
-    def visualize_currencies(self):
-
-        fig, ax = plt.subplots()
-        labels = [list(currency.keys())[0] for currency in self.__cur_lst]
-        values = [
-            float(".".join(currency[list(currency.keys())[0]][1]))
-            for currency in self.__cur_lst
-        ]
-
-        ax.bar(labels, values, color = 'skyblue')
-        ax.set_ylabel('Курсы к рублю')
-        ax.set_title('Курсы валют на текущую дату')
-
-        plt.savefig('currencies.jpg')
-        plt.show()
 
 def get_currencies(currencies_ids_lst: list) -> list:
     manager = CurrencyManager()
     return manager.get_currencies(currencies_ids_lst)
-        
+
+def test_get_currencies_correct_ids():
+    manager = CurrencyManager()
+    manager.clear_cache()
+    result = manager.get_currencies(['R01035', 'R01335', 'R01700J'])
+    assert len(result) > 0, "Тест не пройден: результат пустой"
+    assert 'Фунт стерлингов Соединенного королевства' in [currency['GBP'][0] for currency in result if 'GBP' in currency], "Тест не пройден: неправильное название валюты"
+    print("Тест на корректные ID пройден.")
+
+def test_get_currencies_incorrect_id():
+    manager = CurrencyManager()
+    manager.clear_cache()
+    result = manager.get_currencies(['R9999'])
+    assert result == [{'R9999':None}], "Тест не пройден: неправильный код валюты не обработан корректно"
+    print("Тест на неправильный ID пройден.")
+
         # currencies = []
         # for el in self.__cur_lst:
         #     currencies.append(str(el.keys()))
@@ -122,10 +162,12 @@ def get_currencies(currencies_ids_lst: list) -> list:
 if __name__ == '__main__':
 
     currency_ids = ['R01035', 'R01335', 'R01700J']
-    result = get_currencies(currency_ids)
+    manager = CurrencyManager()
+    result = manager.get_currencies(currency_ids)
 
     if result:
         print("Полученные данные о валютах:", result)
+        manager.visualize_currencies()
 
-        currencies_list = CurrenciesLst(result)
-        currencies_list.visualize_currencies()
+    test_get_currencies_correct_ids()
+    test_get_currencies_incorrect_id()

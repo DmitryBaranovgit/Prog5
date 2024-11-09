@@ -1,1 +1,1 @@
-Laboratory work 6
+Laboratory work №6

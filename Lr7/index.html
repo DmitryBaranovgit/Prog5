@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title>Курсы валют</title>
+</head>
+<body>
+    <h1>Клиент ID: {{ client_id }}</h1>
+    <div id = "rates"></div>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:8888/ws");
+        ws.onmessage = function(event) {
+            const rates = JSON.parse(event.data);
+            document.getElementById("rates").innerHTML = `
+                <p>USD: ${rates.USD}</p>
+                <p>EUR: ${rates.EUR}</p>
+                <p>GBP: ${rates.GBP}</p>
+            `;
+        };
+    </script>
+</body>
+</html>

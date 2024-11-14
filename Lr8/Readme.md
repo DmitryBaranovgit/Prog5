@@ -1,2 +1,2 @@
 
-Laboratory work 
+Laboratory work №

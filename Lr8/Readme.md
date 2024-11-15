@@ -15,7 +15,7 @@
 
 Пример получения данных о погоде:
 
-![Weather_data_fetcher.py](Weather_data_fetcher.py)
+[Weather_data_fetcher.py](Weather_data_fetcher.py)
 
 Данные возвращаются в формате JSON и содержат информацию о температуре на различные даты.
 
@@ -28,7 +28,7 @@
 
 Пример кода для визуализации:
 
-![Weather-visualiser.py](Weather-visualizer.py)
+[Weather-visualiser.py](Weather-visualizer.py)
 
 Этот код рисует два графика: диаграмму рассеяния температур по времени и boxplot для температур.
 

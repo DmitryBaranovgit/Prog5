@@ -1,14 +1,20 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import json
+from Weather_data_fetcher import getweather
+from datetime import datetime
 
 def visualise_data(json_data = ''):
     if json_data:
-        data = pd.read_json(json_data)
-        city_name = data['city']
-
-        dates = [measure['dt'] for measure in data['temps']]
+        data = json.loads(json_data)
+        city_name = data.get('city', 'Санкт-Петербурге')
+        dates = [datetime.utcfromtimestamp(measure['dt']).strftime('%Y-%m-%d %H:%M') for measure in data['temps']]
         temps = [measure['temp'] for measure in data['temps']]
 
+        if not dates or not temps:
+            print("Данные для графиков отсутствуют.")
+            return 
+        
         plt.figure(figsize = (12, 6))
         plt.subplot(1, 2, 1)
         plt.scatter(dates, temps, color = 'blue')
@@ -24,3 +30,7 @@ def visualise_data(json_data = ''):
 
         plt.tight_layout()
         plt.show()
+
+api_key = 'a4611204101ca7a351f889896311963d'
+weather_data_json = getweather(api_key)
+visualise_data(weather_data_json)

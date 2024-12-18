@@ -17,7 +17,7 @@
 
 ### Установка зависимостей
 
-```
+```bash
 git clone 
 cd bonus-program-api
 pip install -r requirements.txt
@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 Создайте файл requirements.txt:
 
-```
+```bash
 Flask
 flask-jwt-extended
 ```
@@ -35,7 +35,7 @@ flask-jwt-extended
 1. Откройте терминал и перейдите в директорию проекта.
 2. Запустите сервер:
 
-```
+```bash
 python Lr9.py
 ```
 
@@ -51,7 +51,7 @@ python Lr9.py
 
 Пример ответа:
 
-```
+```json
 {
         "message": "Welcome to the Bonus Program API!",
         "endpoints": {
@@ -68,14 +68,16 @@ python Lr9.py
 
 Пример запроса:
 
+```json
 {
     username = data.get("username")
     password = data.get("password")
 }
+```
 
 Пример ответа:
 
-```
+```json
 {
     "token": ""
 }
@@ -94,13 +96,13 @@ python Lr9.py
 
 Заголовки:
 
-```
+```plaintext
 Authorization: Bearer <>
 ```
 
 Пример ответа:
 
-```
+```json
 {
         "current_level": "Silver",
         "spending": 500,
@@ -135,13 +137,13 @@ bonus_levels = {
 
 Отправьте запрос:
 
-```
+```bash
 curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d '{"username": "user1", "password": "password1"}'
 ```
 
 Пример ответа:
 
-```
+```json
 {
     "token": ""
 }
@@ -150,24 +152,30 @@ curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d 
 
 Используйте полученный токен:
 
-```
+```json
 curl -X GET http://127.0.0.1:5000/bonus -H "Authorization: Bearer your-jwt-token"
 ```
 
 Пример ответа:
 
-```
+```json
 {
     "current_level": "Silver",
     "spending": 500,
     "next_level": "Gold",
     "next_level_min_spending": 1000,
 }
-
-# Структура проекта
-
 ```
+
+### Структура проекта
+
+```plaintext
 bonus-program-api/
 --- Lr9.py # Основной файл приложения
 --- Requirements.txt # Зависимости
 --- Readme.md # Документация проекта
+```
+
+### Результат
+![Терминал](Flask.png)
+![Пример использования](Result.png)
